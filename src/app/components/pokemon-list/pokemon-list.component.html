@@ -1,0 +1,40 @@
+<h1 class="app-title">Pokedex</h1>
+
+<div class="container">
+  <div class="header-container">
+    <input
+      [(ngModel)]="searchText"
+      (ngModelChange)="searchPokemon()"
+      placeholder="Buscar Pokemon"
+    />
+    <button (click)="toggleSortOrder()">Ordenar</button>
+    <select [(ngModel)]="sortType" (change)="sortPokemons()">
+      <option value="name">Ordenar alfabéticamente</option>
+      <option value="number">Ordenar por número</option>
+    </select>
+  </div>
+
+  <div class="cards-container">
+    <div
+      class="pokemon-card"
+      *ngFor="
+        let pokemon of pokemons
+          | slice : (currentPage - 1) * pageSize : currentPage * pageSize;
+        index as i
+      "
+    >
+      <div class="pokemon-card-header">
+        <h3>{{ pokemon.name }}</h3>
+        <p>#{{ pokemon.number }}</p>
+      </div>
+      <img [src]="pokemon.imageUrl" alt="{{ pokemon.name }}" />
+      <button class="remove-pokemon" (click)="removePokemon(i)">Eliminar Pokemon</button>
+    </div>
+  </div>
+
+  <app-pagination
+    [totalItems]="pokemons.length"
+    [pageSize]="pageSize"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
+</div>
